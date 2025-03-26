@@ -1,0 +1,11 @@
+---- Pitch Checklist ----
+Things that I think should be answered during writing of the pitch OR at least before betting
+If answer to any of these questions is *yes* it should probably be mentioned in the key-results
+
+- Do the action added/modified in the pitch create a History note? (or should it?)
+- Do the action added/modified in the pitch create a API subscription event? (or should it? https://lime-go.readme.io/reference/eventsubscription )
+- Can you import the type worked on in the pitch through the Admin migration OR new import in the app?
+- What other types have links to the type worked on in the pitch, will these changes impact how they are displayed or any API calls?
+- Are the parameters we modified in the pitch involved in any sort of external sync (ERP, Calendar, Other?)
+
+

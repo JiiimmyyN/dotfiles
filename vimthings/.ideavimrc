@@ -1,0 +1,40 @@
+let mapleader = ","
+
+"Lets kick the arrow key habit!
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+
+"B and E go to start and end of file, $ and ^
+nnoremap B ^
+nnoremap E $
+nnoremap $ <nop>
+nnoremap ^ <nop>
+
+sethandler <C-V> i:ide n-v:vim
+"Toggle current fold with space
+:map <space> <action>(CollapseRegion)
+
+nnoremap gn :action GotoNextError<CR>
+nnoremap gp :action GotoPreviousError<CR>
+
+set visualbell
+set noerrorbells
+
+
+sethandler <C-A> a:vim
+sethandler <C-C> a:ide
+sethandler <C-D> a:vim
+sethandler <C-F> a:ide
+sethandler <C-I> a:vim
+sethandler <C-K> a:ide
+sethandler <C-L> a:vim
+sethandler <C-M> a:vim
+sethandler <C-O> a:vim
+sethandler <C-P> a:vim
+sethandler <C-R> a:ide
+sethandler <C-S> a:ide
+sethandler <C-U> a:vim
+sethandler <C-X> a:ide
+sethandler <C-[> a:vim

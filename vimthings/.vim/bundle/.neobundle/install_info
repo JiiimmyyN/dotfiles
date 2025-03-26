@@ -1,0 +1,2 @@
+3.0
+{'neobundle.vim': {'checked_time': 1682606168, 'installed_uri': 'https://github.com/Shougo/neobundle.vim.git', 'installed_path': '/c/Users/jimmy.nilsson/.vim/bundle/neobundle.vim', 'revisions': {}, 'updated_time': '1532563471'}, 'vim-todo-lists': {'checked_time': 1682606550, 'installed_uri': 'https://github.com/aserebryakov/vim-todo-lists.git', 'installed_path': '/c/Users/jimmy.nilsson/.vim/bundle/vim-todo-lists', 'revisions': {'1593415955': '7ccdcf4a557c452d14f7f64a534b72375adb1bb7'}, 'updated_time': '1593415955'}}

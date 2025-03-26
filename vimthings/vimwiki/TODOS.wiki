@@ -1,0 +1,9 @@
+[[index]] - [[Goals 2024]] - [[Elasticsearch notes]]
+=== TODOS === 
+- [ ] Interview case
+- [ ] Supabase
+- [ ] Elastic - Source import
+
+- [ ] Coworker/<id>/getDueDeals (what is this about?)
+- [ ] Web API Integration tests
+- [ ] Performance review - pre write up thing

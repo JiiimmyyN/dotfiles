@@ -1,0 +1,17 @@
+[[index]] - [[TODOS]] - [[Goals 2024]] 
+
+Ealstic size info:
+Total 141Gb, ~123000000 docs (131Gb, 113000000 docs only app clusters)
+_This is not adding up mathematically but can give us a hint on sizing of indices_
+
+*History* doc count: 27000000 = ~23%		-> 30.1Gb	-> 20 shards, 1 replica
+*Person* doc cound: 22200000 = ~19%		-> 24.9Gb	-> 20 shards, 1 replica
+*Organization* doc count: 16500000 = ~14%	-> 18.3Gb	-> 20 shards, 1 replica
+*Deal* doc count: 500000 = ~0.4%		-> 0.57Gb	-> 10 shards, 1 replica
+
+16 500 000 / 10000 = 
+
+*Tag* doc count: 136000 = ~??%			-> ??		-> 5 shards, 1 replica
+*TargetList* doc count: 80000 = ~??%		-> ??		-> 5 shards, 1 replica
+*MailCampaign* doc count: 17000 = ~??%		-> ??		-> 5 shards, 1 replica
+*Coworker* doc count: 13000 = ~??%		-> ?? 		-> 5 shards, 1 replica

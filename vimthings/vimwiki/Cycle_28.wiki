@@ -1,0 +1,39 @@
+[[Index]]
+[[Elasticsearch Cource]]
+
+== Notes ==
+1. Graph: All *customers*, Turnover (10 ranges, let FE request the ranges?)
+	- Will it be shown in ranges? YES
+	- Should BE return actual value for every single org OR group together in ranges? Calculate in BE
+	- Do we have the data in elastic? Yes *'turnover'* field on organization, contains the latest data we have for the latest year.
+	- [x] STATUS: Staging
+	
+2. Graph: All *customers*, Number of employees (10 ranges, let FE request the ranges? )
+	- What does EXACT NUMBER mean in this context? Exact number of employees
+	- Should BE return aggregated data, or a value for every single customer? Aggregated
+	- Do we have the data in elastic? Yes, *'number_of_employees_exact'* field, contains latest data for last year.
+	- [x] STATUS: Staging
+	
+3. Graph: Top X, Industry code, *customers* 
+	- Should BE return the text, or just the industry code "code" (prefer the code, let FE translate)
+	- Let FE set "size" (number of top results to include)
+	- Industry code located in field *'0_LineOfBusiness_1'*, only the industry code.
+	- [x] STATUS: Staging
+	
+4. Customer trend widget
+	- Total number of customers at a certain point: Year, Quarter, Month, Week (day?)
+	- Possibly using history notes - has to be DB query
+	- [-] STATUS: Staging - lots of problems, 
+	
+5. Top X customers in terms of won deals/value (Table)
+	- Should allow sorting on columns
+	- Should allow to pass "size" & "page"
+	- Columns (Company name, Coworker, Sales value, Invoice value (ERP), Number of Deals, Customer since)
+	- Should coworker be the person responsible for deal OR set on the company card? COWORKER
+	- Easiest solved by db query
+	- [x] STATUS: Staging
+	
+6. Recently lost/won customers (db query)
+	- Capped visually in FE (?)
+	- [x] STATUS: Included in the "trend widget"?
+	

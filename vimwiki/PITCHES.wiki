@@ -1,0 +1,49 @@
+== Multi-participants ==
+There is still a lot of un answered questions on this one for me.
+
+- Should we have history notes on 'extra participants'? (No ?) Only "main coworker will get statistics"
+- Should the public API be updated to include 'external participants'? (No ?)
+- Cap on number of recipients - is this "security" issue not handled by Nylas?
+
+Pretty light on FE - BE heavy (possibly)
+
+== Elastic search ==
+
+- Source import for organization type - "as a protocol"?
+- Possibly start/complete Auth web-client->search API
+
+== Email Sendouts ==
+(word of pitch "company" ?????)
+
+Currently the statistics for sendouts is gathered on our side, every time someone opens/reads/bounces etc we get a event tha is queued up and then processed one by one, this process is pretty slow and if any event is missed the statistics will be a missmatch from what m-tech actually have.
+
+Because of above reason there is a delay between when stats show up in the Go app and m-tech
+
+- Is it possible to get the stats from m-tech directly (API? - instead of processing each event)
+
+----
+
+Filtering on persons is done through elastic.
+- Company Industry - Persons do currently *NOT* have industry in elastic
+- Company County - Persons do currently *NOT* have county in elastic
+- Company Responsible - Persons do currently *NOT* have responsible coworker (company) in elastic
+- Mail Consent Changed Date - Available
+
+----
+
+== Batched FE Improvements ==
+
+- "FE Wish - Add Relation in Pipeline" - customer relation? (We don't have this in elastic, requires BE)
+- "FE Wish - Lead Page" - Adding more sorting options (requires BE, but easy, good issue for Marcus?)
+
+== Invite Coworkers ==
+WHY PYTHON?
+
+- Coworkers are index in elastic search, how do we plan on solving this in Python?
+- Key Reuslt: transactional emails moved to m-tech -> Are all the emails supposed to be moved? (forgot password etc?)
+- Will the "Coworker" be created when you send invite? (coworkers are indexed)
+- 
+
+
+
+

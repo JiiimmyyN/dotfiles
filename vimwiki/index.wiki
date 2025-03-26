@@ -1,0 +1,30 @@
+[[Cycle_28]]
+
+= Notes = 
+Identify areas to develop long/short term 
+
+~~I don't feel like I've done anything useful this cycle~~
+
+
+
+How to properly tackle tech debt
+- A lot of deprecated services (not really tech debt, at least not the type I think about)
+- Started elastic (sort of? but not really, always something else coming in the way causing us to drop it, lack of commitment?)
+- Sometime at the start of the year there was a discussion and said that we would always have one (1) person working on something tech debt related
+
+[[PITCHES]]
+
+[[TODOS]] - [[Goals 2024]] - [[Elasticsearch notes]] 
+
+[[Elasticsearch Cource]]
+
+- elastic.co/cloud - Free trial
+- ela.st/slack - Elastic slack
+
+[[1-1 Notes]]
+
+[[OTHER NOTES]]
+
+[[Pitch checklist]]
+- 
+- Feedback on how I approached the downtimes - Structured, Serious, Methodical, Not just theory but tested theories

@@ -1,0 +1,22 @@
+[[Index]]
+
+== Section 1 - Introduction ==
+- Github: https://github.com/codingexplained/complete-guide-to-elasticsearch
+- documents is rows in SQL, fields are columns
+- X-pack adds features to different elastic stack software
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

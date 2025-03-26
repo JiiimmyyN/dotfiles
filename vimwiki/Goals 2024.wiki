@@ -1,0 +1,41 @@
+[[index]] - [[TODOS]] - [[Elasticsearch notes]]
+
+
+== Goals 2024 ==
+- Extras: initiative "just do" - https://github.com/Lundalogik/lime-go-admin/issues/20 (local dev - copy AFs)
+- Downtimes: Detailed logs of each downtime until issue was resolved
+- Extras: Created the "pitch checklist", review of pitch revieled a lot of unknowns
+
+Documentation lead - improve existing and missing documentation
+---------------------------------------------------------------
+- Added Swagger docs for Internal API
+- Updated docs for setting up local dev environment
+
+Implement 1-2 pitches start to finish FE & BE
+---------------------------------------------
+- https://github.com/Lundalogik/team-lime-go/issues/103 (minor issue - not pitch)
+-  
+
+Participate in at least 2 Hack Tuesdays
+---------------------------------------
+- Created a PoC for elasticsearch
+- Worked on "Auth testing" - never got it working
+- Used 1 for elastic course
+
+Write at least one pitch for Elasticsearch upgrade to latest version
+--------------------------------------------------------------------
+- Current progress: pitch [work started] URL: https://product.lime-crm.com/client/object/pitch/3796
+- Had meeting talked about pitch @ 13May/2024
+- NOTES: [[Elasticsearch notes]]
+
+
+Mentor Mateusz (?)
+------------------
+- Mateusz left before we really got anywhere with this.
+*Action points:*
+- [x] Check with Stavros how to proceed, how to get started & if he's talked with Mateusz about it (done on 20204/05/22)
+- [x] Stavros promissed to check with Mateusz 
+- [ ] Set up something with Mateusz
+- [ ] 
+
+
