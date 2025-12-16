@@ -1,0 +1,1 @@
+/home/adeadrat/.config/omarchy/current/theme/neovim.lua
