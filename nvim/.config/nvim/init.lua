@@ -1,6 +1,3 @@
--- bootstrap lazy.nvim, LazyVim and your plugins
---require("config.lazy")
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -135,15 +132,6 @@ vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper win
 
 -- neo-tree.nvim keymaps
 vim.keymap.set("n", "<leader>nt", "<cmd>Neotree toggle<CR>", { desc = "Toggle File Explorer" })
-
--- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
--- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
--- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
--- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
--- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
-
--- [[ Basic Autocommands ]]
---  See `:help lua-guide-autocommands`
 
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
@@ -283,6 +271,12 @@ require("lazy").setup({
         { "<leader>s", group = "[S]earch" },
         { "<leader>t", group = "[T]oggle" },
         { "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
+        {
+          "<leader>g",
+          group = "[G]it",
+          mode = { "n", "v" },
+          icon = { icon = " ", side = "left", color = "orange" },
+        },
       },
     },
   },
@@ -365,7 +359,13 @@ require("lazy").setup({
       vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
       vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
       vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
-      vim.keymap.set("n", "<C-p>", builtin.git_files, { desc = "[S]earch tracked [F]iles" })
+      vim.keymap.set("n", "<C-p>", function()
+        builtin.git_files({
+          desc = "[S]earch tracked [F]iles",
+          show_untracked = true,
+          cwd = vim.fn.expand("%:p:h"),
+        })
+      end, { desc = "[S]earch tracked [F]iles" })
       vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
       vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
       vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
@@ -463,6 +463,24 @@ require("lazy").setup({
     end,
   },
   {
+    "NeogitOrg/neogit",
+    lazy = true,
+    dependencies = {
+      "nvim-lua/plenary.nvim", -- required
+      "sindrets/diffview.nvim", -- optional - Diff integration
+
+      -- Only one of these is needed.
+      "nvim-telescope/telescope.nvim", -- optional
+      --"ibhagwan/fzf-lua",              -- optional
+      --"nvim-mini/mini.pick",           -- optional
+      --"folke/snacks.nvim",             -- optional
+    },
+    cmd = "Negogit",
+    keys = {
+      { "<leader>gn", "<cmd>Neogit<cr>", desc = "Show [N]eogit UI" },
+    },
+  },
+  {
     "ThePrimeagen/git-worktree.nvim", -- Manage git worktrees
     dependencies = {
       "nvim-telescope/telescope.nvim",
@@ -473,11 +491,11 @@ require("lazy").setup({
       })
 
       -- Keymap to open the git worktree telescope picker
-      vim.keymap.set("n", "<leader>gw", function()
+      vim.keymap.set("n", "<leader>gwt", function()
         require("telescope").extensions.git_worktree.git_worktrees()
-      end, { desc = "Git [W]orktrees" })
+      end, { desc = "Git [W]ork[t]rees" })
 
-      vim.keymap.set("n", "<leader>gcw", function()
+      vim.keymap.set("n", "<leader>gwc", function()
         require("telescope").extensions.git_worktree.create_git_worktree()
       end, { desc = "Git [C]reate new [W]orktrees" })
     end,
@@ -542,35 +560,6 @@ require("lazy").setup({
       "saghen/blink.cmp",
     },
     config = function()
-      -- Brief aside: **What is LSP?**
-      --
-      -- LSP is an initialism you've probably heard, but might not understand what it is.
-      --
-      -- LSP stands for Language Server Protocol. It's a protocol that helps editors
-      -- and language tooling communicate in a standardized fashion.
-      --
-      -- In general, you have a "server" which is some tool built to understand a particular
-      -- language (such as `gopls`, `lua_ls`, `rust_analyzer`, etc.). These Language Servers
-      -- (sometimes called LSP servers, but that's kind of like ATM Machine) are standalone
-      -- processes that communicate with some "client" - in this case, Neovim!
-      --
-      -- LSP provides Neovim with features like:
-      --  - Go to definition
-      --  - Find references
-      --  - Autocompletion
-      --  - Symbol Search
-      --  - and more!
-      --
-      -- Thus, Language Servers are external tools that must be installed separately from
-      -- Neovim. This is where `mason` and related plugins come into play.
-      --
-      -- If you're wondering about lsp vs treesitter, you can check out the wonderfully
-      -- and elegantly composed help section, `:help lsp-vs-treesitter`
-
-      --  This function gets run when an LSP attaches to a particular buffer.
-      --    That is to say, every time a new file is opened that is associated with
-      --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
-      --    function will be executed to configure the current buffer
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
         callback = function(event)
@@ -846,7 +835,7 @@ require("lazy").setup({
         -- by the server configuration above. Useful when disabling
         -- certain features of an LSP (for example, turning off formatting for ts_ls)
         server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-        require("lspconfig")[server_name].setup(server)
+        vim.lsp.config(server_name, server)
       end
 
       require("mason-lspconfig").setup({
@@ -859,9 +848,66 @@ require("lazy").setup({
         },
       })
 
-      --setup_server("lua_ls")
       vim.lsp.enable("lua_ls")
+
+      --[[
+      do
+        -- paths to check for project.godot file
+        local paths_to_check = { "/", "/../" }
+        local is_godot_project = false
+        local godot_project_path = ""
+        local cwd = vim.fn.getcwd()
+
+        -- iterate over paths and check
+        for _, value in pairs(paths_to_check) do
+          if vim.uv.fs_stat(cwd .. value .. "project.godot") then
+            is_godot_project = true
+            godot_project_path = cwd .. value
+            break
+          end
+        end
+
+        if is_godot_project then
+          -- check if server is already running in godot project path
+          local is_server_running = vim.uv.fs_stat(godot_project_path .. "/server.pipe")
+          -- start server, if not already running
+          if not is_server_running then
+            vim.fn.serverstart(godot_project_path .. "/server.pipe")
+          end
+
+          local lsconfig = require("lspconfig")
+          lsconfig.gdscript.setup({})
+          --[[ .setup({
+            cmd = { "godot", "--language-server", "--path", godot_project_path },
+            filetypes = { "gd", "gdscript", "gdscript3" },
+            root_dir = lsconfig.util.root_pattern("project.godot", ".git"),
+            single_file_support = true,
+          })
+        end
+
+        if is_godot_project then
+          vim.notify("Godot project detected: LSP connecting...", vim.log.levels.INFO, { title = "LSP Setup" })
+        end
+
+        local util = require("lspconfig.util")
+
+        vim.lsp.config("gdscript", {
+          -- Connect to a running Godot editor LSP:
+          cmd = vim.lsp.rpc.connect("127.0.0.1", 6005),
+          filetypes = { "gd", "gdscript", "gdscript3" },
+
+          -- Project root: look for project.godot or fallback to git root
+          root_dir = function(fname)
+            return util.root_pattern("project.godot", ".git")(fname)
+          end,
+
+          single_file_support = true,
+        })
+      end
+        ]]
+      --
     end,
+    -- Setup for Godot 4 / GDScript without Mason
   },
   {
     "pmizio/typescript-tools.nvim",
@@ -1121,9 +1167,9 @@ require("lazy").setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
-  --{
-  --"github/copilot.vim",
-  --},
+  {
+    "github/copilot.vim",
+  },
   {
     "folke/trouble.nvim",
     opts = {}, -- for default options, refer to the configuration section for custom setup.
@@ -1182,6 +1228,7 @@ require("lazy").setup({
         "go",
         "gomod",
         "c_sharp",
+        "gdscript",
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
@@ -1267,6 +1314,36 @@ require("lazy").setup({
     },
   },
 })
+
+local function feed(keys, mode)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, false, true), mode, false)
+end
+
+vim.keymap.set("n", "<C-k>c", function()
+  feed("gcc", "n")
+end, { desc = "Comment line" })
+
+vim.keymap.set("v", "<C-k>c", function()
+  local s = vim.fn.getpos("'<")[2]
+  local e = vim.fn.getpos("'>")[2]
+  if s ~= e then
+    --feed(":'<,'>normal gcc")
+    feed("gc", "v")
+  else
+    feed("gb", "v")
+  end
+end, { desc = "Comment selection (smart)" })
+
+vim.keymap.set("v", "<C-k>u", function()
+  local s = vim.fn.getpos("'<")[2]
+  local e = vim.fn.getpos("'>")[2]
+  if s ~= e then
+    --feed(":'<,'>normal gcc")
+    feed("gc", "v")
+  else
+    feed("gb", "v")
+  end
+end, { desc = "Comment selection (smart)" })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
