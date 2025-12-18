@@ -1,0 +1,28 @@
+general.import = [ "~/.config/omarchy/current/theme/alacritty.toml" ]
+
+[env]
+TERM = "xterm-256color"
+
+[font]
+normal = { family = "CaskaydiaMono Nerd Font", style = "Regular" }
+bold = { family = "CaskaydiaMono Nerd Font", style = "Bold" }
+italic = { family = "CaskaydiaMono Nerd Font", style = "Italic" }
+size = 11
+
+[window]
+padding.x = 14
+padding.y = 14
+decorations = "None"
+
+[keyboard]
+bindings = [
+    { key = "V", mods = "Control|Shift", action = "Paste" },
+    { key = "C", mods = "Control|Shift", action = "Copy" },
+    #{ key = "Period",   mods = "Control",           chars = "\u001b[27;5;5~" },
+    { key = "Period",   mods = "Control",           chars = "\u001b[27;4;9" },
+    { key = "Tab",      mods = "Control",           chars = "\u001b[27;5;9~" },
+    { key = "Tab",      mods = "Shift | Control",   chars = "\u001b[27;6;9~" }
+
+    #bind-key -n C-Tab send-keys Escape "[27;5;9~"
+    #bind-key -n C-S-Tab send-keys Escape "[27;6;9~"
+]
