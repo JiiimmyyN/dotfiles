@@ -360,11 +360,35 @@ require("lazy").setup({
       vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
       vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
       vim.keymap.set("n", "<C-p>", function()
+        local godot = vim.fs.find("project.godot", { upward = true, path = vim.fn.expand("%:p:h") })[1]
+
+        local cwd = godot and vim.fs.dirname(godot) or vim.fn.getcwd()
+
+        local ignore_patterns = {}
+        if godot then
+          ignore_patterns = {
+            "^addons/", -- paths are typically relative to cwd in telescope
+            "^%.godot/",
+            "^%.import/",
+            "^bin/",
+            "^build/",
+            "^cache/",
+            "^logs/",
+          }
+        end
+
         builtin.git_files({
-          desc = "[S]earch tracked [F]iles",
           show_untracked = true,
-          cwd = vim.fn.expand("%:p:h"),
-        })
+          cwd = cwd,
+          file_ignore_patterns = ignore_patterns,
+        }, { desc = "[S]earch tracked [F]iles" })
+
+        -- builtin.git_files({
+        --   desc = "[S]earch tracked [F]iles",
+        --   show_untracked = true,
+        --   cwd = vim.fn.expand("%:p:h"),
+        --   file_ignore_patterns = ignore_patterns,
+        -- })
       end, { desc = "[S]earch tracked [F]iles" })
       vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
       vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
@@ -779,23 +803,42 @@ require("lazy").setup({
             },
           },
         },
-        csharp_ls = {
-          cmd = { "csharp-ls" },
-          filetypes = { "cs", "razor" },
-          root_dir = function(fname)
-            local lspconfig_util = require("lspconfig.util")
-            return lspconfig_util.root_pattern("*.sln", "*.csproj")(fname)
-              or lspconfig_util.root_pattern(".git")(fname)
-              or vim.fn.getcwd()
-          end,
-          settings = {
-            csharp = {
-              formatting = { enable = false },
-              inlayHints = { enable = true },
-              diagnostics = { enable = true },
-            },
-          },
-        },
+        -- csharp_ls = {
+        --   cmd = { "csharp-ls" },
+        --   filetypes = { "cs", "razor" },
+        --   root_dir = function(fname)
+        --     local lspconfig_util = require("lspconfig.util")
+        --     return lspconfig_util.root_pattern("*.sln", "*.csproj")(fname)
+        --       or lspconfig_util.root_pattern(".git")(fname)
+        --       or vim.fn.getcwd()
+        --   end,
+        --   settings = {
+        --     csharp = {
+        --       formatting = { enable = false },
+        --       inlayHints = { enable = true },
+        --       diagnostics = { enable = true },
+        --     },
+        --   },
+        -- },
+        -- omnisharp = {
+        --   cmd = { "omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
+        --   filetypes = { "cs", "razor" },
+        --   root_dir = function(fname)
+        --     local lspconfig_util = require("lspconfig.util")
+        --     return lspconfig_util.root_pattern("*.sln", "*.csproj")(fname)
+        --       or lspconfig_util.root_pattern(".git")(fname)
+        --       or vim.fn.getcwd()
+        --   end,
+        --   settings = {
+        --     omnisharp = {
+        --       enableEditorConfigSupport = true,
+        --       enableRoslynAnalyzers = true,
+        --       organizeImportsOnFormat = false,
+        --       enableImportCompletion = true,
+        --       sdkPath = "",
+        --     },
+        --   },
+        -- },
       }
 
       -- Ensure the servers and tools above are installed
@@ -815,8 +858,8 @@ require("lazy").setup({
         return server ~= "lua_ls"
       end, vim.tbl_keys(servers or {}))
       vim.list_extend(ensure_installed, {
-        "csharp_ls", -- C# language server
-        "csharpier", -- C# formatter
+        --"csharp_ls", -- C# language server
+        --"csharpier", -- C# formatter
         "netcoredbg", -- C# debugger
         "stylua", -- Used to format Lua code
         "gofumpt", -- Used to format Go code
@@ -824,6 +867,7 @@ require("lazy").setup({
         "delve", -- Go debugger
         "eslint_d", -- JavaScript/TypeScript linter
         "prettierd", -- JavaScript/TypeScript formatter
+        "omnisharp", -- C# language server
       })
       require("mason-tool-installer").setup({
         ensure_installed = ensure_installed,
@@ -1324,25 +1368,11 @@ vim.keymap.set("n", "<C-k>c", function()
 end, { desc = "Comment line" })
 
 vim.keymap.set("v", "<C-k>c", function()
-  local s = vim.fn.getpos("'<")[2]
-  local e = vim.fn.getpos("'>")[2]
-  if s ~= e then
-    --feed(":'<,'>normal gcc")
-    feed("gc", "v")
-  else
-    feed("gb", "v")
-  end
+  feed("gc", "v")
 end, { desc = "Comment selection (smart)" })
 
 vim.keymap.set("v", "<C-k>u", function()
-  local s = vim.fn.getpos("'<")[2]
-  local e = vim.fn.getpos("'>")[2]
-  if s ~= e then
-    --feed(":'<,'>normal gcc")
-    feed("gc", "v")
-  else
-    feed("gb", "v")
-  end
+  feed("gc", "v")
 end, { desc = "Comment selection (smart)" })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
