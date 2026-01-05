@@ -4,9 +4,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- [[ Basic Keymaps ]]
---  See `:help vim.keymap.set()`
-
 --vim.keymap.set("n", "<Esc>[27;5;9~", "<C-Tab>", { noremap = false })
 --vim.keymap.set("n", "<Esc>[27;6;9~", "<C-S-Tab>", { noremap = false })
 -- Clear highlights on search when pressing <Esc> in normal mode
@@ -44,19 +41,8 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
+-- Load the plugins specified in `lua/config/lazy.lua` -> lua/plugins
 require("config.lazy")
-
-------------- CODE FOLING -------------------
-------------- Stopped working for some reason -------------------
-
--- Using treesitter folds
--- vim.o.foldmethod = "expr"
--- vim.o.foldexpr = "nvim_treesitter#foldexpr()"
--- vim.o.foldlevelstart = 99 -- open all folds by default
--- vim.o.foldenable = true
--- vim.keymap.set("n", "<C-Space>", "za", { noremap = true, silent = true, desc = "Toggle fold" })
-
---------------------------------------------
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
