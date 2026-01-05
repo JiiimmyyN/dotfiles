@@ -861,7 +861,7 @@ require("lazy").setup({
       end, vim.tbl_keys(servers or {}))
       vim.list_extend(ensure_installed, {
         --"csharp_ls", -- C# language server
-        --"csharpier", -- C# formatter
+        "csharpier", -- C# formatter
         "netcoredbg", -- C# debugger
         "stylua", -- Used to format Lua code
         "gofumpt", -- Used to format Go code
