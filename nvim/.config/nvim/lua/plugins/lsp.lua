@@ -77,7 +77,7 @@ return {
           keys = {
             { "<leader>cl", function() Snacks.picker.lsp_config() end, desc = "Lsp Info" },
             { "gd", vim.lsp.buf.definition, desc = "Goto Definition", has = "definition" },
-            { "gr", vim.lsp.buf.references, desc = "References", nowait = true },
+            { "grr", vim.lsp.buf.references, desc = "References", nowait = true },
             { "gI", vim.lsp.buf.implementation, desc = "Goto Implementation" },
             { "gy", vim.lsp.buf.type_definition, desc = "Goto T[y]pe Definition" },
             { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
@@ -89,7 +89,8 @@ return {
             { "<leader>cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "x" }, has = "codeLens" },
             { "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh & Display Codelens", mode = { "n" }, has = "codeLens" },
             { "<leader>cR", function() Snacks.rename.rename_file() end, desc = "Rename File", mode ={"n"}, has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } },
-            { "<leader>cr", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
+            { "grn", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
+            { "<C-r>r", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
             { "<leader>cA", LazyVim.lsp.action.source, desc = "Source Action", has = "codeAction" },
             { "]]", function() Snacks.words.jump(vim.v.count1) end, has = "documentHighlight",
               desc = "Next Reference", enabled = function() return Snacks.words.is_enabled() end },
@@ -132,7 +133,7 @@ return {
                 },
               },
             },
-          },
+          }, --lua_ls
           gopls = {
             cmd = { "gopls" },
             filetypes = { "go", "gomod", "gowork", "gotmpl" },
@@ -168,20 +169,64 @@ return {
                 },
               },
             },
-          },
+          }, --gopls
+          tsserver = {
+            filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact", "typescript.tsx" },
+            settings = {
+              typescript = {
+                inlayHints = {
+                  includeInlayParameterNameHints = "all",
+                  includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                  includeInlayFunctionParameterTypeHints = true,
+                  includeInlayVariableTypeHints = true,
+                  includeInlayPropertyDeclarationTypeHints = true,
+                  includeInlayFunctionLikeReturnTypeHints = true,
+                  includeInlayEnumMemberValueHints = true,
+                },
+              },
+              javascript = {
+                inlayHints = {
+                  includeInlayParameterNameHints = "all",
+                  includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                  includeInlayFunctionParameterTypeHints = true,
+                  includeInlayVariableTypeHints = true,
+                  includeInlayPropertyDeclarationTypeHints = true,
+                  includeInlayFunctionLikeReturnTypeHints = true,
+                  includeInlayEnumMemberValueHints = true,
+                },
+              },
+            },
+          }, --tsserver
+          eslint = {
+            settings = {
+              workingDirectory = { mode = "auto" },
+            },
+          }, --eslint
+          tailwindcss = {
+            filetypes = { "html", "css", "scss", "javascriptreact", "typescriptreact" },
+          }, --tailwindcss
+          -- roslyn = {
+          --   ft = { "cs", "vb", "razor" },
+          --   settings = {
+          --     ["csharp|inlay_hints"] = {
+          --       csharp_enable_inlay_hints_for_implicit_object_creation = true,
+          --       csharp_enable_inlay_hints_for_implicit_variable_types = true,
+          --       csharp_enable_inlay_hints_for_types = true,
+          --       dotnet_enable_inlay_hints_for_parameters = true,
+          --     },
+          --     ["csharp|symbol_search"] = {
+          --       dotnet_search_reference_assemblies = true,
+          --     },
+          --     ["csharp|code_lens"] = {
+          --       dotnet_enable_references_code_lens = true,
+          --     },
+          --   },
+          -- }, -- roslyn
         },
         -- you can do any additional lsp server setup here
         -- return true if you don't want this server to be setup with lspconfig
         ---@type table<string, fun(server:string, opts: vim.lsp.Config):boolean?>
-        setup = {
-          -- example to setup with typescript.nvim
-          -- tsserver = function(_, opts)
-          --   require("typescript").setup({ server = opts })
-          --   return true
-          -- end,
-          -- Specify * to use this function as a fallback for any server
-          -- ["*"] = function(server, opts) end,
-        },
+        setup = {},
       }
       return ret
     end,
@@ -189,6 +234,7 @@ return {
     config = vim.schedule_wrap(function(_, opts)
       -- setup autoformat
       LazyVim.format.register(LazyVim.lsp.formatter())
+      Snacks.notify.info("WE GET HERE!")
 
       -- setup keymaps
       for server, server_opts in pairs(opts.servers) do
@@ -298,24 +344,78 @@ return {
     end),
   },
   {
+    "seblyng/roslyn.nvim",
+    ft = { "cs", "razor" },
+    -- event = "FileType",
+    lazy = false,
+    config = function()
+      require("roslyn").setup()
+
+      local mason_root = require("mason.settings").current.install_root_dir
+      local rzls_path = vim.fn.expand(mason_root .. "/packages/roslyn/libexec/.razorExtension")
+      local cmd = {
+        "roslyn",
+        "--stdio",
+        "--logLevel=Information",
+        "--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.get_log_path()),
+        "--razorSourceGenerator=" .. vim.fs.joinpath(rzls_path, "Microsoft.CodeAnalysis.Razor.Compiler.dll"),
+        "--razorDesignTimePath=" .. vim.fs.joinpath(rzls_path, "Targets", "Microsoft.NET.Sdk.Razor.DesignTime.targets"),
+        "--extension=" .. vim.fs.joinpath(rzls_path, "Microsoft.VisualStudioCode.RazorExtension.dll"),
+      }
+
+      vim.lsp.config("roslyn", {
+        on_attach = function()
+          Snacks.notify.info("Roslyn.nvim attached")
+        end,
+        cmd = cmd,
+        settings = {
+          ["csharp|inlay_hints"] = {
+            csharp_enable_inlay_hints_for_implicit_object_creation = true,
+            csharp_enable_inlay_hints_for_implicit_variable_types = true,
+            csharp_enable_inlay_hints_for_types = true,
+            dotnet_enable_inlay_hints_for_parameters = true,
+          },
+          ["csharp|symbol_search"] = {
+            dotnet_search_reference_assemblies = true,
+          },
+          ["csharp|code_lens"] = {
+            dotnet_enable_references_code_lens = true,
+          },
+        },
+      })
+    end,
+    opts = {
+      filewatching = "auto",
+      broad_search = true,
+    },
+  },
+  {
     "mason-org/mason.nvim",
     cmd = "Mason",
     keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     build = ":MasonUpdate",
     opts_extend = { "ensure_installed" },
     opts = {
+      registries = {
+        "github:mason-org/mason-registry",
+        "github:Crashdummyy/mason-registry",
+      },
       ensure_installed = {
         "stylua",
         "shfmt",
-        "csharpier", -- C# formatter
-        "netcoredbg", -- C# debugger
         "stylua", -- Used to format Lua code
         "gofumpt", -- Used to format Go code
         "goimports", -- Used to format Go code
         "delve", -- Go debugger
-        "eslint_d", -- JavaScript/TypeScript linter
         "prettierd", -- JavaScript/TypeScript formatter
-        "omnisharp", -- C# language server
+        "eslint_d", -- JavaScript/TypeScript linter
+        "typescript-language-server", -- TypeScript language server
+        "eslint-lsp", -- ESLint language server
+        "tailwindcss-language-server", -- Tailwind CSS language server
+
+        "csharpier", -- C# formatter
+        "roslyn",
+        "netcoredbg", -- C# debugger
       },
     }, ---@param opts MasonSettings | {ensure_installed: string[]}
     config = function(_, opts)
@@ -339,6 +439,25 @@ return {
           end
         end
       end)
+    end,
+  }, --mason.nvim
+  {
+    "conform.nvim",
+    opts = function(_, opts)
+      opts.async = true
+      opts.formatters_by_ft = opts.formatters_by_ft or {}
+      opts.formatters_by_ft.cs = { "csharpier_custom" }
+      opts.formatters_by_ft.csproj = { "csharpier_custom" }
+
+      opts.formatters = opts.formatters or {}
+      opts.formatters.csharpier_custom = {
+        command = "csharpier",
+        args = {
+          "format",
+          "--write-stdout",
+        },
+        to_stdin = true,
+      }
     end,
   },
 }
