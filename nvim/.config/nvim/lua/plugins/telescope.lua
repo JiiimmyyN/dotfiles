@@ -66,30 +66,30 @@ return { -- Fuzzy Finder (files, lsp, etc)
       vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
       vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
       vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
-      vim.keymap.set("n", "<C-p>", function()
-        local godot = vim.fs.find("project.godot", { upward = true, path = vim.fn.expand("%:p:h") })[1]
-
-        local cwd = godot and vim.fs.dirname(godot) or vim.fn.getcwd()
-
-        local ignore_patterns = {}
-        if godot then
-          ignore_patterns = {
-            "^addons/", -- paths are typically relative to cwd in telescope
-            "^%.godot/",
-            "^%.import/",
-            "^bin/",
-            "^build/",
-            "^cache/",
-            "^logs/",
-          }
-        end
-
-        builtin.git_files({
-          show_untracked = true,
-          cwd = cwd,
-          file_ignore_patterns = ignore_patterns,
-        }, { desc = "[S]earch tracked [F]iles" })
-      end, { desc = "[S]earch tracked [F]iles" })
+      -- vim.keymap.set("n", "<C-p>", function()
+      --   local godot = vim.fs.find("project.godot", { upward = true, path = vim.fn.expand("%:p:h") })[1]
+      --
+      --   local cwd = godot and vim.fs.dirname(godot) or vim.fn.getcwd()
+      --
+      --   local ignore_patterns = {}
+      --   if godot then
+      --     ignore_patterns = {
+      --       "^addons/", -- paths are typically relative to cwd in telescope
+      --       "^%.godot/",
+      --       "^%.import/",
+      --       "^bin/",
+      --       "^build/",
+      --       "^cache/",
+      --       "^logs/",
+      --     }
+      --   end
+      --
+      --   builtin.git_files({
+      --     show_untracked = true,
+      --     cwd = cwd,
+      --     file_ignore_patterns = ignore_patterns,
+      --   }, { desc = "[S]earch tracked [F]iles" })
+      -- end, { desc = "[S]earch tracked [F]iles" })
       vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
       vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
       vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
