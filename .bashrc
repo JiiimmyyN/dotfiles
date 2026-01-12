@@ -3,7 +3,7 @@
 
 # All the default Omarchy aliases and functions
 # (don't mess with these directly, just overwrite them here!)
-source ~/.local/share/omarchy/default/bash/rc
+source ~/.config/bashrc/bash/rc
 
 # Add your own exports, aliases, and functions here.
 #
@@ -13,8 +13,8 @@ source ~/.local/share/omarchy/default/bash/rc
 # pnpm
 export PNPM_HOME="/home/adeadrat/.local/share/pnpm"
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+*":$PNPM_HOME:"*) ;;
+*) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
 
