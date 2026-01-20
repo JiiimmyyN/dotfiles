@@ -22,5 +22,20 @@ return {
   },
   {
     "github/copilot.vim",
+    init = function()
+      vim.g.copilot_no_tab_map = true
+      vim.g.copilot_assume_mapped = true
+    end,
+    config = function()
+      vim.keymap.set("i", "<C-l>", "<Plug>(copilot-accept-line)", { silent = true })
+      vim.keymap.set("i", "<Tab>", "<Plug>(copilot-accept-line)", { silent = true })
+
+      -- optional: cycle suggestions
+      vim.keymap.set("i", "<M-]>", "<Plug>(copilot-next)", { silent = true })
+      vim.keymap.set("i", "<M-[>", "<Plug>(copilot-previous)", { silent = true })
+
+      -- optional: dismiss
+      vim.keymap.set("i", "<C-]>", "<Plug>(copilot-dismiss)", { silent = true })
+    end,
   },
 }
