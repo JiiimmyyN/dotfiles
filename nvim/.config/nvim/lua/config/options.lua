@@ -28,22 +28,22 @@ vim.o.showmode = false
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
 vim.schedule(function()
+  vim.o.clipboard = "unnamedplus"
+
   local is_wsl = vim.fn.has("wsl") == 1
   if is_wsl then
     vim.g.clipboard = {
-      name = "clip-wsl",
+      name = "win32yank-wsl",
       copy = {
-        ["+"] = "clip.exe",
-        ["*"] = "clip.exe",
+        ["+"] = "win32yank.exe -i --crlf",
+        ["*"] = "win32yank.exe -i --crlf",
       },
       paste = {
-        ["+"] = "powershell.exe -NoProfile -Command Get-Clipboard",
-        ["*"] = "powershell.exe -NoProfile -Command Get-Clipboard",
+        ["+"] = "win32yank.exe -o --lf",
+        ["*"] = "win32yank.exe -o --lf",
       },
       cache_enabled = 0,
     }
-  else
-    vim.o.clipboard = "unnamedplus"
   end
 end)
 
